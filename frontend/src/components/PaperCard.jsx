@@ -1,9 +1,7 @@
-const PaperCard = () => {
+const PaperCard = ({paper}) => {
   return (
     <div>
-      <h3>Paper Title</h3>
-      <p>Exam | Year | Subject</p>
-      <button disabled>View</button>
+      <h4>{paper.paperTitle}</h4>
     </div>
   );
 };
