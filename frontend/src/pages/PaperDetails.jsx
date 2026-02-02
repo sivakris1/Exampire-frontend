@@ -1,11 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const PaperDetails = () => {
   const { id } = useParams();
   const [paper, setPaper] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchPaper = async () => {
@@ -29,7 +33,9 @@ const PaperDetails = () => {
 
   return (
     <div>
-      <h2>{paper.metadata?.title || "Untitled Paper"}</h2>
+        <button onClick={() => navigate(-1)}>← Back</button>
+
+      <h2>{paper.paperTitle || "Untitled Paper"}</h2>
       <p>Exam: {paper.examName}</p>
       <p>Stream: {paper.stream}</p>
 
