@@ -33,15 +33,32 @@ const PaperDetails = () => {
 
   return (
     <div>
-        <button onClick={() => navigate(-1)}>← Back</button>
+  <button onClick={() => navigate(-1)}>← Back</button>
 
-      <h2>{paper.paperTitle || "Untitled Paper"}</h2>
-      <p>Exam: {paper.examName}</p>
-      <p>Stream: {paper.stream}</p>
+  <h2>{paper.paperTitle || "Untitled Paper"}</h2>
 
-      <h3>Details</h3>
-      <pre>{JSON.stringify(paper.metadata, null, 2)}</pre>
-    </div>
+  <section>
+    <p><strong>Exam:</strong> {paper.examName}</p>
+    <p><strong>Stream:</strong> {paper.stream}</p>
+  </section>
+
+  <section>
+    {paper.metadata?.year && (
+      <p><strong>Year:</strong> {paper.metadata.year}</p>
+    )}
+
+    {paper.metadata?.shift && (
+      <p><strong>Shift:</strong> {paper.metadata.shift}</p>
+    )}
+  </section>
+
+  {/* Temporary debug section (keep for now) */}
+  <details>
+    <summary>Raw Metadata (debug)</summary>
+    <pre>{JSON.stringify(paper.metadata, null, 2)}</pre>
+  </details>
+</div>
+
   );
 };
 
