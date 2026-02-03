@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { getPaperById } from "../api/client";
 
 
 const PaperDetails = () => {
@@ -14,9 +15,7 @@ const PaperDetails = () => {
   useEffect(() => {
     const fetchPaper = async () => {
       try {
-        const res = await axios.get(
-          `http://localhost:9000/api/papers/${id}`
-        );
+        const res = await getPaperById();
         setPaper(res.data.paper || res.data);
       } catch (err) {
         console.error(err);
