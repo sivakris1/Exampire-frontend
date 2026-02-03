@@ -4,13 +4,25 @@ import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
 import { getPapers } from "../api/client";
 const Papers = () => {
-
   const [papers, setPapers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
 
-  const exam = searchParams.get('exam');
+  const [year, setYear] = useState("");
+  const [shift, setShift] = useState("");
+
+  const exam = searchParams.get("exam");
+
+  const filteredPapers = papers.filter((paper) => {
+  // YEAR FILTER
+  if (year && paper.year !== Number(year)) return false;
+
+  // SHIFT FILTER
+  if (shift && paper.shift !== Number(shift)) return false;
+
+  return true;
+});
 
   useEffect(() => {
     const fetchPapers = async () => {
@@ -23,11 +35,9 @@ const Papers = () => {
           : allPapers;
 
         setPapers(filtered);
-
       } catch (error) {
         console.error("Error fetching papers:", error);
-      }
-      finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -36,15 +46,34 @@ const Papers = () => {
   }, [exam]);
 
   return (
-     <div>
+    <div>
       <h2>{exam} Papers</h2>
 
-      {papers.length === 0 ? (
+      <div>
+        <label>
+          Year:
+          <select value={year} onChange={(e) => setYear(e.target.value)}>
+            <option value="">All</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+          </select>
+        </label>
+
+        <label>
+          Shift:
+          <select value={shift} onChange={(e) => setShift(e.target.value)}>
+            <option value="">All</option>
+            <option value="Shift 1">Shift 1</option>
+            <option value="Shift 2">Shift 2</option>
+          </select>
+        </label>
+      </div>
+
+      {filteredPapers.length === 0 ? (
         <p>No papers found</p>
       ) : (
-        papers.map((paper) => (
-          <PaperCard key={paper._id} paper={paper} />
-        ))
+        filteredPapers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
       )}
     </div>
   );
