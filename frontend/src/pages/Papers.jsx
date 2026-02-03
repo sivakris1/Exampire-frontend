@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
+import { getPapers } from "../api/client";
 const Papers = () => {
 
   const [papers, setPapers] = useState([]);
@@ -14,7 +15,7 @@ const Papers = () => {
   useEffect(() => {
     const fetchPapers = async () => {
       try {
-        const response = await axios.get("http://localhost:9000/api/papers/");
+        const response = await getPapers();
         const allPapers = response.data.papers;
 
         const filtered = exam
