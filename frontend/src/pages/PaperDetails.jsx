@@ -15,7 +15,7 @@ const PaperDetails = () => {
   useEffect(() => {
     const fetchPaper = async () => {
       try {
-        const res = await getPaperById();
+        const res = await getPaperById(id);
         setPaper(res.data.paper || res.data);
       } catch (err) {
         console.error(err);
