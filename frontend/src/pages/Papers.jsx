@@ -3,6 +3,8 @@ import axios from "axios";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
 import { getPapers } from "../api/client";
+
+
 const Papers = () => {
   const [papers, setPapers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,6 +13,13 @@ const Papers = () => {
 
   const [year, setYear] = useState("");
   const [shift, setShift] = useState("");
+
+  const availableYears = [...new Set(papers.map((p) => p.year))].sort(
+  (a, b) => b - a
+);
+
+const availableShifts = [...new Set(papers.map((p) => p.shift))].sort();
+
 
   const exam = searchParams.get("exam");
 
@@ -51,23 +60,29 @@ const Papers = () => {
 
       <div>
         <label>
-          Year:
-          <select value={year} onChange={(e) => setYear(e.target.value)}>
-            <option value="">All</option>
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-          </select>
-        </label>
+  Year:
+  <select value={year} onChange={(e) => setYear(e.target.value)}>
+    <option value="">All</option>
+    {availableYears.map((y) => (
+      <option key={y} value={y}>
+        {y}
+      </option>
+    ))}
+  </select>
+</label>
 
-        <label>
-          Shift:
-          <select value={shift} onChange={(e) => setShift(e.target.value)}>
-            <option value="">All</option>
-            <option value="Shift 1">Shift 1</option>
-            <option value="Shift 2">Shift 2</option>
-          </select>
-        </label>
+<label>
+  Shift:
+  <select value={shift} onChange={(e) => setShift(e.target.value)}>
+    <option value="">All</option>
+    {availableShifts.map((s) => (
+      <option key={s} value={s}>
+        Shift {s}
+      </option>
+    ))}
+  </select>
+</label>
+
       </div>
 
       {filteredPapers.length === 0 ? (
