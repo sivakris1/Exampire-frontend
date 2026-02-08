@@ -51,6 +51,18 @@ const PaperDetails = () => {
     )}
   </section>
 
+  {paper.cloudinaryUrl && (
+    <div>
+       <a
+      href={paper.cloudinaryUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      View / Download PDF
+    </a>
+    </div>
+  )}
+
   {/* Temporary debug section (keep for now) */}
   <details>
     <summary>Raw Metadata (debug)</summary>
