@@ -27,8 +27,9 @@ const PaperDetails = () => {
     fetchPaper();
   }, [id]);
 
-  if (loading) return <p>Loading paper...</p>;
-  if (!paper) return <p>Paper not found</p>;
+  if (loading) return <p>Loading question papers, please wait...</p>
+;
+if (!paper) return <p>Unable to load paper details.</p>;
 
   return (
     <div>

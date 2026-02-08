@@ -86,11 +86,16 @@ const availableShifts = [...new Set(papers.map((p) => p.shift))].sort();
       </div>
 
       {filteredPapers.length === 0 ? (
-        <p>No papers found</p>
+        <p>
+  No papers found
+  {year || shift ? " for the selected filters." : "."}
+</p>
+
       ) : (
         filteredPapers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
       )}
     </div>
+
   );
 };
 
