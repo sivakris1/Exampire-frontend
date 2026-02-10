@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 const Exams = () => {
   const navigate = useNavigate();
 
-  const exams = ["JEE Main", "EAMCET"];
+  const exams = ["JEE Main", "AP EAMCET"];
 
   return (
     <div>
