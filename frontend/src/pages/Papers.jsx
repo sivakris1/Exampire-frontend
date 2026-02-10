@@ -14,11 +14,22 @@ const Papers = () => {
   const [shift, setShift] = useState(""); // maps to session
 
   const exam = searchParams.get("exam");
+  console.log("exam param =", exam);
 
-  const fetchPapers = async () => {
+
+  useEffect(() => {
+  const fetch = async () => {
+    const nextPage = page;
+
+    // If filters change, force page = 1 BEFORE fetch
+    if (page !== 1 && (year || shift || exam)) {
+      setPage(1);
+      return;
+    }
+
     try {
       const response = await getPapers({
-        page,
+        page: nextPage,
         examName: exam,
         year: year || undefined,
         session: shift || undefined,
@@ -26,20 +37,14 @@ const Papers = () => {
 
       setPapers(response.data.papers);
       setTotalPages(response.data.pagination.totalPages);
-    } catch (error) {
-      console.error("Error fetching papers:", error);
+    } catch (err) {
+      console.error(err);
     }
   };
 
-  
+  fetch();
+}, [exam, page, year, shift]);
 
-  useEffect(() => {
-    fetchPapers();
-  }, [exam, page, year, shift]);
-
-  useEffect(() => {
-  setPage(1);
-}, [exam, year, shift]);
 
 
   return (
