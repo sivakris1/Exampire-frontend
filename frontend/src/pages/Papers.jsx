@@ -1,49 +1,45 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
 import { getPapers } from "../api/client";
 
 const Papers = () => {
-
   const [searchParams] = useSearchParams();
 
   const [papers, setPapers] = useState([]);
-const [page, setPage] = useState(1);
-const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-const [year, setYear] = useState("");
-const [shift, setShift] = useState(""); // maps to session
-
-
+  const [year, setYear] = useState("");
+  const [shift, setShift] = useState(""); // maps to session
 
   const exam = searchParams.get("exam");
 
   const fetchPapers = async () => {
-      try {
-        const response = await getPapers({
-          page,
-          examName: exam,
-          year: year || undefined,
-          session: shift || undefined,
-        });
+    try {
+      const response = await getPapers({
+        page,
+        examName: exam,
+        year: year || undefined,
+        session: shift || undefined,
+      });
 
-        setPapers(response.data.papers);
-        setTotalPages(response.data.pagination.totalPages);
-      } catch (error) {
-        console.error("Error fetching papers:", error);
-      } 
-    };
+      setPapers(response.data.papers);
+      setTotalPages(response.data.pagination.totalPages);
+    } catch (error) {
+      console.error("Error fetching papers:", error);
+    }
+  };
+
+  
 
   useEffect(() => {
-
     fetchPapers();
-  }, [exam]);
+  }, [exam, page, year, shift]);
 
   useEffect(() => {
-  fetchPapers();
-}, [exam, page, year, shift]);
-
+  setPage(1);
+}, [exam, year, shift]);
 
 
   return (
@@ -54,21 +50,18 @@ const [shift, setShift] = useState(""); // maps to session
         <label>
           Year:
           <input
-  type="number"
-  placeholder="Year"
-  value={year}
-  onChange={(e) => setYear(e.target.value)}
-/>
+            type="number"
+            placeholder="Year"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+          />
         </label>
 
-       
-
-<select value={shift} onChange={(e) => setShift(e.target.value)}>
-  <option value="">All</option>
-  <option value="1">Shift 1</option>
-  <option value="2">Shift 2</option>
-</select>
-
+        <select value={shift} onChange={(e) => setShift(e.target.value)}>
+          <option value="">All</option>
+          <option value="1">Shift 1</option>
+          <option value="2">Shift 2</option>
+        </select>
       </div>
 
       {papers.length === 0 ? (
@@ -77,9 +70,7 @@ const [shift, setShift] = useState(""); // maps to session
           {year || shift ? " for the selected filters." : "."}
         </p>
       ) : (
-        papers.map((paper) => (
-          <PaperCard key={paper._id} paper={paper} />
-        ))
+        papers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
       )}
     </div>
   );
