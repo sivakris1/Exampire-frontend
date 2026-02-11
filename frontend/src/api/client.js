@@ -9,3 +9,12 @@ export const getPapers = (params) => {
 export const getPaperById = (id) => {
   return axios.get(`${API_BASE_URL}/papers/${id}`);
 };
+
+export const favoritePaper = (id) => {
+  return axios.put(`${API_BASE_URL}/papers/${id}/favorite`);
+};
+
+export const unfavoritePaper = (id) => {
+  return axios.put(`${API_BASE_URL}/papers/${id}/unfavorite`);
+};
+
