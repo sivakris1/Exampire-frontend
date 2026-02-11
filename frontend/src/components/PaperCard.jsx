@@ -1,14 +1,34 @@
 import { useNavigate } from "react-router-dom";
+import { favoritePaper, unfavoritePaper } from "../api/client";
+import { useState } from "react";
 
 const PaperCard = ({ paper }) => {
   const navigate = useNavigate();
   console.log(paper)
 
-  return (
-    
+  const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
+  const [liked, setLiked] = useState(false);
 
-    <div onClick={() => navigate(`/papers/${paper._id}`)}
-    style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }} >
+  const handleFavorite = async() => {
+    try {
+      if(!liked){
+        await favoritePaper(paper._id);
+        setFavorites((prev) => prev+1);
+        setLiked(true);
+      }
+      else{
+        await unfavoritePaper(paper._id);
+        setFavorites((prev)=>Math.max(prev-1,0))
+        setLiked(false);
+      }
+    } catch (error) {
+      
+    }
+  }
+
+  return (
+  
+     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}>
       <h3>{paper.paperTitle}</h3>
 
       <p><strong>Exam:</strong> {paper.examName}</p>
@@ -18,8 +38,14 @@ const PaperCard = ({ paper }) => {
 
       <p>
         👁 {paper.metadata?.views} &nbsp; | &nbsp;
-        ❤️ {paper.metadata?.favorites}
+        ❤️ {favorites}
       </p>
+
+      <button onClick={handleFavorite}>
+        {liked ? "Unfavorite" : "Favorite"}
+      </button>
+
+      <br /><br />
 
       <a
         href={paper.cloudinaryUrl}
