@@ -4,10 +4,10 @@ import { useSearchParams } from "react-router-dom";
 import { getPapers } from "../api/client";
 
 const Papers = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [papers, setPapers] = useState([]);
-  const [page, setPage] = useState(1);
+  
   const [totalPages, setTotalPages] = useState(1);
 
   const [year, setYear] = useState("");
@@ -16,16 +16,24 @@ const Papers = () => {
   const exam = searchParams.get("exam");
   console.log("exam param =", exam);
 
+  const page = parseInt(searchParams.get("page")) || 1;
+
+  const handlePageChange = (newPage) => {
+  searchParams.set("page", newPage);
+  setSearchParams(searchParams);
+};
+
+
 
   useEffect(() => {
   const fetch = async () => {
     const nextPage = page;
 
-    // If filters change, force page = 1 BEFORE fetch
-    if (page !== 1 && (year || shift || exam)) {
-      setPage(1);
-      return;
-    }
+    // // If filters change, force page = 1 BEFORE fetch
+    // if (page !== 1 && (year || shift || exam)) {
+    //   setPage(1);
+    //   return;
+    // }
 
     try {
       const response = await getPapers({
@@ -44,6 +52,12 @@ const Papers = () => {
 
   fetch();
 }, [exam, page, year, shift]);
+
+useEffect(() => {
+  searchParams.set("page", 1);
+  setSearchParams(searchParams);
+}, [exam, year, shift]);
+
 
 
 
@@ -82,7 +96,7 @@ const Papers = () => {
   <div style={{ marginTop: "20px" }}>
     <button
       disabled={page === 1}
-      onClick={() => setPage((prev) => prev - 1)}
+      onClick={() => handlePageChange(page-1)}
     >
       Prev
     </button>
@@ -92,7 +106,7 @@ const Papers = () => {
       return (
         <button
           key={pageNumber}
-          onClick={() => setPage(pageNumber)}
+          onClick={() => handlePageChange(pageNumber)}
           style={{
             fontWeight: page === pageNumber ? "bold" : "normal",
             margin: "0 5px"
@@ -105,7 +119,7 @@ const Papers = () => {
 
     <button
       disabled={page === totalPages}
-      onClick={() => setPage((prev) => prev + 1)}
+      onClick={() => handlePageChange(page+1)}
     >
       Next
     </button>
