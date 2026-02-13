@@ -77,6 +77,40 @@ const Papers = () => {
       ) : (
         papers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
       )}
+
+      {totalPages >=0  && (
+  <div style={{ marginTop: "20px" }}>
+    <button
+      disabled={page === 1}
+      onClick={() => setPage((prev) => prev - 1)}
+    >
+      Prev
+    </button>
+
+    {[...Array(totalPages)].map((_, index) => {
+      const pageNumber = index + 1;
+      return (
+        <button
+          key={pageNumber}
+          onClick={() => setPage(pageNumber)}
+          style={{
+            fontWeight: page === pageNumber ? "bold" : "normal",
+            margin: "0 5px"
+          }}
+        >
+          {pageNumber}
+        </button>
+      );
+    })}
+
+    <button
+      disabled={page === totalPages}
+      onClick={() => setPage((prev) => prev + 1)}
+    >
+      Next
+    </button>
+  </div>
+)}
     </div>
   );
 };
