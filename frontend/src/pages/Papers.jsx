@@ -10,13 +10,38 @@ const Papers = () => {
   
   const [totalPages, setTotalPages] = useState(1);
 
-  const [year, setYear] = useState("");
-  const [shift, setShift] = useState(""); // maps to session
+  const year = searchParams.get("year") || "";
+  const shift = searchParams.get("session") || "";
+
 
   const exam = searchParams.get("exam");
   console.log("exam param =", exam);
 
   const page = parseInt(searchParams.get("page")) || 1;
+
+  const handleYearChange = (value) =>{
+    if(value){
+      searchParams.set("year",value)
+    }else{
+      searchParams.delete("year");
+    }
+
+     searchParams.set("page", 1);
+     setSearchParams(searchParams);
+  }
+
+
+  const handleShiftChange = (value) => {
+    if(value){
+      searchParams.set("session",value);
+    }
+    else{
+      searchParams.delete("session");
+    }
+
+    searchParams.set("page", 1);
+    setSearchParams(searchParams);
+  }
 
   const handlePageChange = (newPage) => {
   searchParams.set("page", newPage);
@@ -42,6 +67,8 @@ const Papers = () => {
         year: year || undefined,
         session: shift || undefined,
       });
+
+    
 
       setPapers(response.data.papers);
       setTotalPages(response.data.pagination.totalPages);
@@ -72,11 +99,11 @@ useEffect(() => {
             type="number"
             placeholder="Year"
             value={year}
-            onChange={(e) => setYear(e.target.value)}
+            onChange={(e) => handleYearChange(e.target.value)}
           />
         </label>
 
-        <select value={shift} onChange={(e) => setShift(e.target.value)}>
+        <select value={shift} onChange={(e) => handleShiftChange(e.target.value)}>
           <option value="">All</option>
           <option value="1">Shift 1</option>
           <option value="2">Shift 2</option>
