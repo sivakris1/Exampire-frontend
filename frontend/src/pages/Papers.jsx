@@ -74,8 +74,8 @@ const Papers = () => {
           examName: exam,
           year: year || undefined,
           session: shift || undefined,
-          sortBy: "CreatedAt",
-          sortOrder: "desc",
+          sortBy,
+          sortOrder,
         });
 
         setPapers(response.data.papers);
