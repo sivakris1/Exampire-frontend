@@ -24,3 +24,6 @@ export const logPaperView = (id) => {
   return axios.post(`${API_BASE_URL}/papers/${id}/view`)
 }
 
+export const getRelatedPapers = (id) => {
+  return axios.get(`${API_BASE_URL}/papers/${id}/related`);
+};
