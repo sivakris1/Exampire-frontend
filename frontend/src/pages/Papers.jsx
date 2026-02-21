@@ -10,7 +10,7 @@ const Papers = () => {
 
   const [totalPages, setTotalPages] = useState(1);
 
-  const [sort, setSort] = useState("newest");
+  const sort = searchParams.get("sort") || "newest"; 
 
   const year = searchParams.get("year") || "";
   const shift = searchParams.get("session") || "";
@@ -46,6 +46,12 @@ const Papers = () => {
     searchParams.set("page", newPage);
     setSearchParams(searchParams);
   };
+
+  const handleSortChange = (value) => {
+    searchParams.set("sort",value);
+    searchParams.set("page",1);
+    setSearchParams(searchParams);
+  }
 
   useEffect(() => {
     const fetch = async () => {
@@ -117,7 +123,7 @@ const Papers = () => {
           <option value="2">Shift 2</option>
         </select>
 
-        <select value={sort} onChange={(e) => setSort(e.target.value)}>
+        <select value={sort} onChange={(e) => handleSortChange(e.target.value)}>
           <option value="newest">Newest</option>
           <option value="oldest">Oldest</option>
           <option value="views">Most Viewed</option>
