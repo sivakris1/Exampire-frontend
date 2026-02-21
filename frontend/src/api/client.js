@@ -20,3 +20,7 @@ export const unfavoritePaper = (id) => {
   return axios.put(`${API_BASE_URL}/papers/${id}/unfavorite`);
 };
 
+export const logPaperView = (id) => {
+  return axios.post(`${API_BASE_URL}/papers/${id}/view`)
+}
+
