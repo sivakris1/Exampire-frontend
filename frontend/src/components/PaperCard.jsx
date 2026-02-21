@@ -28,7 +28,9 @@ const PaperCard = ({ paper }) => {
 
   return (
   
-     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}>
+     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}
+     onClick={() => navigate(`/papers/${paper._id}`)}
+     >
       <h3>{paper.paperTitle}</h3>
 
       <p><strong>Exam:</strong> {paper.examName}</p>
