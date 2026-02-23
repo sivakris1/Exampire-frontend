@@ -10,6 +10,8 @@ const Papers = () => {
 
   const [totalPages, setTotalPages] = useState(1);
 
+  const [loading,setLoading] = useState(true)
+
   const sort = searchParams.get("sort") || "newest"; 
 
   const year = searchParams.get("year") || "";
@@ -75,6 +77,8 @@ const Papers = () => {
       }
 
       try {
+
+        setLoading(true)
         const response = await getPapers({
           page: nextPage,
           examName: exam,
@@ -86,6 +90,8 @@ const Papers = () => {
 
         setPapers(response.data.papers);
         setTotalPages(response.data.pagination.totalPages);
+
+        setLoading(false)
       } catch (err) {
         console.error(err);
       }
@@ -99,8 +105,15 @@ const Papers = () => {
     setSearchParams(searchParams);
   }, [exam, year, shift,sort]);
 
+
+  if (loading) {
+  return <p>Loading papers...</p>;
+} else{
   return (
     <div>
+
+      
+
       <h2>{exam} Papers</h2>
 
       <div>
@@ -174,6 +187,8 @@ const Papers = () => {
       )}
     </div>
   );
+}
+
 };
 
 export default Papers;
