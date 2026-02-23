@@ -10,9 +10,11 @@ const Papers = () => {
 
   const [totalPages, setTotalPages] = useState(1);
 
-  const [loading,setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
-  const sort = searchParams.get("sort") || "newest"; 
+  const [error, setError] = useState(null);
+
+  const sort = searchParams.get("sort") || "newest";
 
   const year = searchParams.get("year") || "";
   const shift = searchParams.get("session") || "";
@@ -50,10 +52,10 @@ const Papers = () => {
   };
 
   const handleSortChange = (value) => {
-    searchParams.set("sort",value);
-    searchParams.set("page",1);
+    searchParams.set("sort", value);
+    searchParams.set("page", 1);
     setSearchParams(searchParams);
-  }
+  };
 
   useEffect(() => {
     const fetch = async () => {
@@ -77,8 +79,7 @@ const Papers = () => {
       }
 
       try {
-
-        setLoading(true)
+        setLoading(true);
         const response = await getPapers({
           page: nextPage,
           examName: exam,
@@ -91,104 +92,105 @@ const Papers = () => {
         setPapers(response.data.papers);
         setTotalPages(response.data.pagination.totalPages);
 
-        setLoading(false)
+        setLoading(false);
       } catch (err) {
-        console.error(err);
+        setError("Failed to load papers");
       }
     };
 
     fetch();
-  }, [exam, page, year, shift,sort]);
+  }, [exam, page, year, shift, sort]);
 
   useEffect(() => {
     searchParams.set("page", 1);
     setSearchParams(searchParams);
-  }, [exam, year, shift,sort]);
+  }, [exam, year, shift, sort]);
 
+  if (error) return <p>{error}</p>;
 
   if (loading) {
-  return <p>Loading papers...</p>;
-} else{
-  return (
-    <div>
-
-      
-
-      <h2>{exam} Papers</h2>
-
+    return <p>Loading papers...</p>;
+  } 
+  else {
+    return (
       <div>
-        <label>
-          Year:
-          <input
-            type="number"
-            placeholder="Year"
-            value={year}
-            onChange={(e) => handleYearChange(e.target.value)}
-          />
-        </label>
+        <h2>{exam} Papers</h2>
 
-        <select
-          value={shift}
-          onChange={(e) => handleShiftChange(e.target.value)}
-        >
-          <option value="">All</option>
-          <option value="1">Shift 1</option>
-          <option value="2">Shift 2</option>
-        </select>
+        <div>
+          <label>
+            Year:
+            <input
+              type="number"
+              placeholder="Year"
+              value={year}
+              onChange={(e) => handleYearChange(e.target.value)}
+            />
+          </label>
 
-        <select value={sort} onChange={(e) => handleSortChange(e.target.value)}>
-          <option value="newest">Newest</option>
-          <option value="oldest">Oldest</option>
-          <option value="views">Most Viewed</option>
-        </select>
-      </div>
-
-      {papers.length === 0 ? (
-        <p>
-          No papers found
-          {year || shift ? " for the selected filters." : "."}
-        </p>
-      ) : (
-        papers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
-      )}
-
-      {totalPages >= 0 && (
-        <div style={{ marginTop: "20px" }}>
-          <button
-            disabled={page === 1}
-            onClick={() => handlePageChange(page - 1)}
+          <select
+            value={shift}
+            onChange={(e) => handleShiftChange(e.target.value)}
           >
-            Prev
-          </button>
+            <option value="">All</option>
+            <option value="1">Shift 1</option>
+            <option value="2">Shift 2</option>
+          </select>
 
-          {[...Array(totalPages)].map((_, index) => {
-            const pageNumber = index + 1;
-            return (
-              <button
-                key={pageNumber}
-                onClick={() => handlePageChange(pageNumber)}
-                style={{
-                  fontWeight: page === pageNumber ? "bold" : "normal",
-                  margin: "0 5px",
-                }}
-              >
-                {pageNumber}
-              </button>
-            );
-          })}
-
-          <button
-            disabled={page === totalPages}
-            onClick={() => handlePageChange(page + 1)}
+          <select
+            value={sort}
+            onChange={(e) => handleSortChange(e.target.value)}
           >
-            Next
-          </button>
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="views">Most Viewed</option>
+          </select>
         </div>
-      )}
-    </div>
-  );
-}
 
+        {papers.length === 0 ? (
+          <p>
+            No papers found
+            {year || shift ? " for the selected filters." : "."}
+          </p>
+        ) : (
+          papers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
+        )}
+
+        {totalPages >= 0 && (
+          <div style={{ marginTop: "20px" }}>
+            <button
+              disabled={page === 1}
+              onClick={() => handlePageChange(page - 1)}
+            >
+              Prev
+            </button>
+
+            {[...Array(totalPages)].map((_, index) => {
+              const pageNumber = index + 1;
+              return (
+                <button
+                  key={pageNumber}
+                  onClick={() => handlePageChange(pageNumber)}
+                  style={{
+                    fontWeight: page === pageNumber ? "bold" : "normal",
+                    margin: "0 5px",
+                  }}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })}
+
+            <button
+              disabled={page === totalPages}
+              onClick={() => handlePageChange(page + 1)}
+            >
+              Next
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  }
 };
 
 export default Papers;
