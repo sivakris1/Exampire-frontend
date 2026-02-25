@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
-import { getPapers } from "../api/client";
+import { getPapers, searchPapers } from "../api/client";
 
 const Papers = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +13,8 @@ const Papers = () => {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState(null);
+
+  const [query, setQuery] = useState("");
 
   const sort = searchParams.get("sort") || "newest";
 
@@ -57,6 +59,25 @@ const Papers = () => {
     setSearchParams(searchParams);
   };
 
+  const handleSearch = () => {
+    if (query) {
+      searchParams.set("q", query);
+    } else {
+      searchParams.delete("q");
+    }
+
+    const handleSearch = () => {
+      if (query) {
+        searchParams.set("q", query);
+      } else {
+        searchParams.delete("q");
+      }
+
+      searchParams.set("page", 1);
+      setSearchParams(searchParams);
+    };
+  };
+
   useEffect(() => {
     const fetch = async () => {
       const nextPage = page;
@@ -70,6 +91,8 @@ const Papers = () => {
       let sortBy = "createdAt";
       let sortOrder = "desc";
 
+      const searchQuery = searchParams.get("q");
+
       if (sort === "oldest") {
         sortOrder = "asc";
       }
@@ -80,14 +103,24 @@ const Papers = () => {
 
       try {
         setLoading(true);
-        const response = await getPapers({
-          page: nextPage,
-          examName: exam,
-          year: year || undefined,
-          session: shift || undefined,
-          sortBy,
-          sortOrder,
-        });
+        let response;
+
+        if (searchQuery) {
+          response = await searchPapers({
+            q: searchQuery,
+            page,
+            examName: exam,
+            year: year || undefined,
+            session: shift || undefined,
+          });
+        } else {
+          response = await getPapers({
+            page,
+            examName: exam,
+            year: year || undefined,
+            session: shift || undefined,
+          });
+        }
 
         setPapers(response.data.papers);
         setTotalPages(response.data.pagination.totalPages);
@@ -110,8 +143,7 @@ const Papers = () => {
 
   if (loading) {
     return <p>Loading papers...</p>;
-  } 
-  else {
+  } else {
     return (
       <div>
         <h2>{exam} Papers</h2>
@@ -145,6 +177,15 @@ const Papers = () => {
             <option value="views">Most Viewed</option>
           </select>
         </div>
+
+        <input
+          type="text"
+          placeholder="Search papers..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+        />
+
+        <button onClick={handleSearch}>Search</button>
 
         {papers.length === 0 ? (
           <p>
