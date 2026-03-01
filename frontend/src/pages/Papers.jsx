@@ -65,17 +65,9 @@ const Papers = () => {
     } else {
       searchParams.delete("q");
     }
-
-    const handleSearch = () => {
-      if (query) {
-        searchParams.set("q", query);
-      } else {
-        searchParams.delete("q");
-      }
-
       searchParams.set("page", 1);
       setSearchParams(searchParams);
-    };
+    
   };
 
   useEffect(() => {
