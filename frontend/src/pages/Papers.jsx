@@ -120,11 +120,13 @@ const Papers = () => {
         setLoading(false);
       } catch (err) {
         setError("Failed to load papers");
+        setLoading(false);
+        console.error(err);
       }
     };
 
     fetch();
-  }, [exam, page, year, shift, sort]);
+  }, [exam, page, year, shift, sort, searchParams.get("q")]);
 
   useEffect(() => {
     searchParams.set("page", 1);
