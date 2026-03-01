@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { getPaperById, logPaperView } from "../api/client";
+import { getPaperById, getRelatedPapers, logPaperView } from "../api/client";
 
 const PaperDetails = () => {
   const { id } = useParams();
