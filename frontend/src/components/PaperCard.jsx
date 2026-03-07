@@ -28,9 +28,12 @@ const PaperCard = ({ paper }) => {
 
   return (
   
-     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}
-     onClick={() => navigate(`/papers/${paper._id}`)}
+    <>
+     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" } }
+
      >
+
+      <div onClick={() => navigate(`/papers/${paper._id}`)}>
       <h3>{paper.paperTitle}</h3>
 
       <p><strong>Exam:</strong> {paper.examName}</p>
@@ -38,6 +41,9 @@ const PaperCard = ({ paper }) => {
       <p><strong>Shift:</strong> {paper.shift}</p>
       <p><strong>Difficulty:</strong> {paper.metadata?.difficulty}</p>
 
+     </div>
+
+     <div>
       <p>
         👁 {paper.metadata?.views} &nbsp; | &nbsp;
         ❤️ {favorites}
@@ -57,6 +63,10 @@ const PaperCard = ({ paper }) => {
         Download Paper
       </a>
     </div>
+
+    </div>
+
+    </>
   );
 };
 
