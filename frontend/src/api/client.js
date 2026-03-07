@@ -31,3 +31,7 @@ export const getRelatedPapers = (id) => {
 export const searchPapers = (params) => {
   return axios.get(`${API_BASE_URL}/papers/search`,{params})
 }
+
+export const getSavedPapers = () => {
+  return axios.get(`${API_BASE_URL}/papers/saved`);
+};
