@@ -3,9 +3,7 @@ import axios from "axios";
 const API_BASE_URL = "http://localhost:9000/api";
 
 export const getPapers = (params) => {
-  return axios.get(`${API_BASE_URL}/papers`,{
-    params:params
-  });
+  return axios.get(`${API_BASE_URL}/papers`, { params });
 };
 
 export const getPaperById = (id) => {
@@ -20,18 +18,12 @@ export const unfavoritePaper = (id) => {
   return axios.put(`${API_BASE_URL}/papers/${id}/unfavorite`);
 };
 
-export const logPaperView = (id) => {
-  return axios.post(`${API_BASE_URL}/papers/${id}/view`)
-}
+/* ---------- AUTH ---------- */
 
-export const getRelatedPapers = (id) => {
-  return axios.get(`${API_BASE_URL}/papers/${id}/related`);
+export const loginUser = (data) => {
+  return axios.post(`${API_BASE_URL}/auth/login`, data);
 };
 
-export const searchPapers = (params) => {
-  return axios.get(`${API_BASE_URL}/papers/search`,{params})
-}
-
-export const getSavedPapers = () => {
-  return axios.get(`${API_BASE_URL}/papers/saved`);
+export const registerUser = (data) => {
+  return axios.post(`${API_BASE_URL}/auth/register`, data);
 };
