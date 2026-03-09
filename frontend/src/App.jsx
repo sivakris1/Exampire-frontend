@@ -17,7 +17,10 @@ const App = () => {
         <Route path="/exams/:exam" element={<Papers />} />
         <Route path="/papers" element={<Papers />} />
         <Route path="/papers/:id" element={<PaperDetails />} />
-        <Route path="/saved" element={<SavedPapers />} />
+        <Route path="/saved" element={<SavedPapers />} /> 
+
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Route>
     </Routes>
   );
