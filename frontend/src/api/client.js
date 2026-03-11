@@ -2,6 +2,18 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:9000/api";
 
+/* Attach token automatically */
+API.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+
 export const getPapers = (params) => {
   return axios.get(`${API_BASE_URL}/papers`, { params });
 };
@@ -27,3 +39,5 @@ export const loginUser = (data) => {
 export const registerUser = (data) => {
   return axios.post(`${API_BASE_URL}/auth/register`, data);
 };
+
+export default API;
