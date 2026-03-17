@@ -32,7 +32,7 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       setError("Invalid credentials");
-      console.error(err);
+      console.log(err.response.data);
     }
   };
 
