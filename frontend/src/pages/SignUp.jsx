@@ -29,7 +29,7 @@ const Signup = () => {
       navigate("/login");
     } catch (err) {
       setError("Registration failed");
-      console.error(err);
+      console.log(err.response.data);
     }
   };
 
