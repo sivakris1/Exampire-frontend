@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
-import { getPapers, searchPapers } from "../api/client";
+import { getPapers } from "../api/client";
+// import { getPapers, searchPapers } from "../api/client";
 
 const Papers = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,9 +66,17 @@ const Papers = () => {
     } else {
       searchParams.delete("q");
     }
+
+    const handleSearch = () => {
+      if (query) {
+        searchParams.set("q", query);
+      } else {
+        searchParams.delete("q");
+      }
+
       searchParams.set("page", 1);
       setSearchParams(searchParams);
-    
+    };
   };
 
   useEffect(() => {
@@ -120,13 +129,12 @@ const Papers = () => {
         setLoading(false);
       } catch (err) {
         setError("Failed to load papers");
-        setLoading(false);
-        console.error(err);
+        console.log(err)
       }
     };
 
     fetch();
-  }, [exam, page, year, shift, sort, searchParams.get("q")]);
+  }, [exam, page, year, shift, sort]);
 
   useEffect(() => {
     searchParams.set("page", 1);
