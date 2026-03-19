@@ -5,6 +5,8 @@ import { loginUser } from "../api/client";
 const Login = () => {
   const navigate = useNavigate();
 
+  const [loading,setLoading] = useState(false);
+
   const [form, setForm] = useState({
     email: "",
     password: ""
@@ -23,6 +25,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await loginUser(form);
 
       const token = res.data.token;
@@ -33,6 +36,8 @@ const Login = () => {
     } catch (err) {
       setError("Invalid credentials");
       console.log(err.response.data );
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -61,7 +66,7 @@ const Login = () => {
           required
         />
 
-        <button type="submit">Login</button>
+        {loading ? 'Loading' : <button type="submit">Login</button>}
       </form>
     </div>
   );
