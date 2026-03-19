@@ -5,6 +5,8 @@ import { registerUser } from "../api/client";
 const Signup = () => {
   const navigate = useNavigate();
 
+  const [loading,setLoading] = useState(false);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -24,12 +26,15 @@ const Signup = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       await registerUser(form);
 
       navigate("/login");
     } catch (err) {
       setError("Registration failed");
       console.log(err.response.data);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -66,7 +71,7 @@ const Signup = () => {
           required
         />
 
-        <button type="submit">Signup</button>
+        {loading ? "Loading" : <button type="submit">Signup</button>}
       </form>
     </div>
   );
