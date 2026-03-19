@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:9000/api";
+const API = axios.create({
+  baseURL: "http://localhost:9000/api"
+});
 
 /* Attach token automatically */
 API.interceptors.request.use((config) => {
@@ -13,31 +15,54 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
+API.interceptors.response.use(
+  (res) => res,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
+  }
+);
+/* ---------- PAPERS ---------- */
 
 export const getPapers = (params) => {
-  return axios.get(`${API_BASE_URL}/papers`, { params });
+  return API.get("/papers", { params });
 };
 
 export const getPaperById = (id) => {
-  return axios.get(`${API_BASE_URL}/papers/${id}`);
+  return API.get(`/papers/${id}`);
+};
+
+export const getRelatedPapers = (id) => {
+  return API.get(`/papers/${id}/related`);
+};
+
+export const logPaperView = (id) => {
+  return API.post(`/papers/${id}/view`);
 };
 
 export const favoritePaper = (id) => {
-  return axios.put(`${API_BASE_URL}/papers/${id}/favorite`);
+  return API.put(`/papers/${id}/favorite`);
 };
 
 export const unfavoritePaper = (id) => {
-  return axios.put(`${API_BASE_URL}/papers/${id}/unfavorite`);
+  return API.put(`/papers/${id}/unfavorite`);
+};
+
+export const getSavedPapers = () => {
+  return API.get("/papers/saved");
 };
 
 /* ---------- AUTH ---------- */
 
 export const loginUser = (data) => {
-  return axios.post(`${API_BASE_URL}/auth/login`, data);
+  return API.post("/auth/login", data);
 };
 
 export const registerUser = (data) => {
-  return axios.post(`${API_BASE_URL}/auth/register`, data);
+  return API.post("/auth/signup", data);
 };
 
 export default API;
