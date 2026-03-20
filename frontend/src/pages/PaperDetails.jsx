@@ -30,6 +30,20 @@ const PaperDetails = () => {
     };
 
     fetchPaper();
+
+    const logView = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) return; // skip if not logged in
+
+    try {
+      await logPaperView(id);
+    } catch (err) {
+      console.error("View log failed", err);
+    }
+  };
+
+  logView();
   }, [id]);
 
   if (loading) return <p>Loading question papers, please wait...</p>;
