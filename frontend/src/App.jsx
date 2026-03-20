@@ -9,6 +9,8 @@ import Home from "./pages/Home";
 import SavedPapers from "./pages/SavedPapers";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 
 const App = () => {
   return (
@@ -19,7 +21,11 @@ const App = () => {
         <Route path="/exams/:exam" element={<Papers />} />
         <Route path="/papers" element={<Papers />} />
         <Route path="/papers/:id" element={<PaperDetails />} />
-        <Route path="/saved" element={<SavedPapers />} /> 
+        <Route path="/saved" element={
+          <ProtectedRoute>
+            <SavedPapers />
+          </ProtectedRoute>
+          } /> 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Route>

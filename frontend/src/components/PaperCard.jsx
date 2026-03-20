@@ -10,6 +10,12 @@ const PaperCard = ({ paper }) => {
   const [liked, setLiked] = useState(false);
 
   const handleFavorite = async() => {
+    const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
     try {
       if(!liked){
         await favoritePaper(paper._id);
@@ -22,7 +28,7 @@ const PaperCard = ({ paper }) => {
         setLiked(false);
       }
     } catch (error) {
-      
+      console.log(error)
     }
   }
 
