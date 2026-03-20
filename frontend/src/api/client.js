@@ -55,6 +55,10 @@ export const getSavedPapers = () => {
   return API.get("/papers/saved");
 };
 
+export const getTrendingPapers = () => {
+  return API.get("/papers/trending");
+};
+
 /* ---------- AUTH ---------- */
 
 export const loginUser = (data) => {
