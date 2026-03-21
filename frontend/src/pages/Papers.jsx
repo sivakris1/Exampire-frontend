@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import PaperCard from "../components/PaperCard";
 import { useSearchParams } from "react-router-dom";
-import { getPapers } from "../api/client";
+import { getPapers, getSavedPapers } from "../api/client";
 // import { getPapers, searchPapers } from "../api/client";
 
 const Papers = () => {
@@ -16,6 +16,8 @@ const Papers = () => {
   const [error, setError] = useState(null);
 
   const [query, setQuery] = useState("");
+
+  const [savedIds, setSavedIds] = useState([]);
 
   const sort = searchParams.get("sort") || "newest";
 
@@ -141,6 +143,24 @@ const Papers = () => {
     setSearchParams(searchParams);
   }, [exam, year, shift, sort]);
 
+  useEffect(() => {
+  const fetchSaved = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const res = await getSavedPapers();
+      const ids = res.data.papers.map(p => p._id);
+      setSavedIds(ids);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  fetchSaved();
+}, [papers]);
+
+
   if (error) return <p>{error}</p>;
 
   if (loading) {
@@ -195,7 +215,8 @@ const Papers = () => {
             {year || shift ? " for the selected filters." : "."}
           </p>
         ) : (
-          papers.map((paper) => <PaperCard key={paper._id} paper={paper} />)
+          papers.map((paper) => <PaperCard key={paper._id} paper={paper} 
+          isSaved={savedIds.includes(paper._id)}  /> )
         )}
 
         {totalPages >= 0 && (
