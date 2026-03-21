@@ -44,7 +44,7 @@ export const logPaperView = (id) => {
 };
 
 export const favoritePaper = (id) => {
-  return API.put(`/papers/${id}/favorite`);
+  return API.post(`/papers/${id}/favorite`);
 };
 
 export const unfavoritePaper = (id) => {
