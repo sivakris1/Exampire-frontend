@@ -1,85 +1,65 @@
 import { useNavigate } from "react-router-dom";
-import { favoritePaper, unfavoritePaper } from "../api/client";
-import { useState } from "react";
+import API, { favoritePaper, unfavoritePaper } from "../api/client";
+import { useEffect, useState } from "react";
 
-const PaperCard = ({ paper }) => {
+const PaperCard = ({ paper, isSaved: initialSaved }) => {
   const navigate = useNavigate();
-  console.log(paper)
 
   const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
-  const [liked, setLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const [isSaved, setIsSaved] = useState(initialSaved);
 
-  const handleFavorite = async() => {
+  useEffect(() => {
+    setIsSaved(initialSaved);
+  }, [initialSaved]);
+
+  
+
+  const handleFavorite = async () => {
     const token = localStorage.getItem("token");
 
-  if (!token) {
-    navigate("/login");
-    return;
-  }
-    try {
-      if(!liked){
-       const res =  await favoritePaper(paper._id);
-        setFavorites((prev) => prev+1);
-        setLiked(true);
-        setIsSaved(res.data.isFavorited);
-      }
-      else{
-        await unfavoritePaper(paper._id);
-        setFavorites((prev)=>Math.max(prev-1,0))
-        setLiked(false);
-      }
-    } catch (error) {
-      console.log(error)
+    if (!token) {
+      navigate("/login");
+      return;
     }
-  }
+
+    try {
+      const res = await API.post(`/papers/${paper._id}/favorite`);
+
+      setIsSaved(res.data.isFavorited);
+      setFavorites(res.data.favoritesCount);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
-  
-    <>
-     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" } }
-
-     >
+    <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}>
 
       <div onClick={() => navigate(`/papers/${paper._id}`)}>
-      <h3>{paper.paperTitle}</h3>
+        <h3>{paper.paperTitle}</h3>
+        <p><strong>Exam:</strong> {paper.examName}</p>
+        <p><strong>Year:</strong> {paper.year}</p>
+        <p><strong>Shift:</strong> {paper.shift}</p>
+        <p><strong>Difficulty:</strong> {paper.metadata?.difficulty}</p>
+      </div>
 
-      <p><strong>Exam:</strong> {paper.examName}</p>
-      <p><strong>Year:</strong> {paper.year}</p>
-      <p><strong>Shift:</strong> {paper.shift}</p>
-      <p><strong>Difficulty:</strong> {paper.metadata?.difficulty}</p>
+      <div>
+        <p>
+          👁 {paper.metadata?.views} &nbsp; | &nbsp;
+          ❤️ {favorites}
+        </p>
 
-     </div>
+        <button onClick={handleFavorite}>
+          {isSaved ? "❤️ Saved" : "🤍 Save"}
+        </button>
 
-     <div>
-      <p>
-        👁 {paper.metadata?.views} &nbsp; | &nbsp;
-        ❤️ {favorites}
-      </p>
+        <br /><br />
 
-      <button onClick={handleFavorite}>
-        {liked ? "Unfavorite" : "Favorite"}
-      </button>
-
-      <button onClick={handleFavorite}>
-  {isSaved ? "❤️ Saved" : "🤍 Save"}
-</button>
-
-      <br /><br />
-
-      <a
-        href={paper.cloudinaryUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Download Paper
-      </a>
+        <a href={paper.cloudinaryUrl} target="_blank" rel="noopener noreferrer">
+          Download Paper
+        </a>
+      </div>
     </div>
-
-    </div>
-
-    </>
   );
 };
-
 export default PaperCard;
