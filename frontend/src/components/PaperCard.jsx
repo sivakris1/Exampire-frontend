@@ -8,6 +8,7 @@ const PaperCard = ({ paper }) => {
 
   const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
   const [liked, setLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleFavorite = async() => {
     const token = localStorage.getItem("token");
@@ -18,9 +19,10 @@ const PaperCard = ({ paper }) => {
   }
     try {
       if(!liked){
-        await favoritePaper(paper._id);
+       const res =  await favoritePaper(paper._id);
         setFavorites((prev) => prev+1);
         setLiked(true);
+        setIsSaved(res.data.isFavorited);
       }
       else{
         await unfavoritePaper(paper._id);
@@ -58,6 +60,10 @@ const PaperCard = ({ paper }) => {
       <button onClick={handleFavorite}>
         {liked ? "Unfavorite" : "Favorite"}
       </button>
+
+      <button onClick={handleFavorite}>
+  {isSaved ? "❤️ Saved" : "🤍 Save"}
+</button>
 
       <br /><br />
 
