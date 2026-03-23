@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import API, { favoritePaper, unfavoritePaper } from "../api/client";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const PaperCard = ({ paper, isSaved: initialSaved }) => {
   const navigate = useNavigate();
@@ -15,22 +16,29 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
   
 
   const handleFavorite = async () => {
-    const token = localStorage.getItem("token");
+  const token = localStorage.getItem("token");
 
-    if (!token) {
-      navigate("/login");
-      return;
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const res = await API.post(`/papers/${paper._id}/favorite`);
+
+    setIsSaved(res.data.isFavorited);
+    setFavorites(res.data.favoritesCount);
+
+    if (res.data.isFavorited) {
+      toast.success("Saved to your papers");
+    } else {
+      toast("Removed from saved");
     }
 
-    try {
-      const res = await API.post(`/papers/${paper._id}/favorite`);
-
-      setIsSaved(res.data.isFavorited);
-      setFavorites(res.data.favoritesCount);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  } catch (error) {
+    toast.error("Something went wrong");
+  }
+};
 
   return (
     <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}>
