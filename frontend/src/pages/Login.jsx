@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import { loginUser } from "../api/client";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const location = useLocation();
+
+  const from = location.state?.from || "/";
 
   const [loading,setLoading] = useState(false);
 
