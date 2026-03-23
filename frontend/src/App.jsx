@@ -10,10 +10,13 @@ import SavedPapers from "./pages/SavedPapers";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 
 const App = () => {
   return (
+    <>
+    <Toaster position="top-right" />
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
@@ -30,6 +33,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
       </Route>
     </Routes>
+    </>
   );
 };
 
