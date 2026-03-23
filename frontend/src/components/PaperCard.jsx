@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import API, { favoritePaper, unfavoritePaper } from "../api/client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -12,15 +12,15 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
   useEffect(() => {
     setIsSaved(initialSaved);
   }, [initialSaved]);
-
   
 
   const handleFavorite = async () => {
   const token = localStorage.getItem("token");
 
   if (!token) {
-    navigate("/login");
-    return;
+    navigate("/login", {
+    state: { from: window.location.pathname }
+});
   }
 
   try {
