@@ -43,7 +43,7 @@ const Login = () => {
       navigate("/");
     } catch (err) {
       const message =
-      err.response?.data?.message || "Login failed ❌";
+      err.response?.data?.message || "Login failed❌";
 
     toast.error(message);
     }finally{

@@ -33,7 +33,7 @@ const Signup = () => {
       navigate("/login");
     } catch (err) {
       const message =
-      err.response?.data?.message || "Registration failed ❌";
+      err.response?.data?.message || "Registration failed❌";
 
     toast.error(message);
     }finally{
