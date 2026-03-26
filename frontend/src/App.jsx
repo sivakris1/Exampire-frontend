@@ -15,7 +15,7 @@ import PaperDetails from "./pages/PaperDetails";
 
 const App = () => {
   return (
-    <>
+    <div  style={{ maxWidth: "900px", margin: "0 auto", padding: "20px" }}>
     <Toaster position="top-right" />
     <Routes>
       <Route element={<Layout />}>
@@ -33,7 +33,7 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
       </Route>
     </Routes>
-    </>
+    </div>
   );
 };
 
