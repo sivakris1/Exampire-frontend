@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import { loginUser } from "../api/client";
+import toast from "react-hot-toast";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -36,10 +38,14 @@ const Login = () => {
 
       localStorage.setItem("token", token);
 
+      toast.success("Login successful ✅");
+
       navigate("/");
     } catch (err) {
-      setError("Invalid credentials");
-      console.log(err.response.data );
+      const message =
+      err.response?.data?.message || "Login failed ❌";
+
+    toast.error(message);
     }finally{
       setLoading(false);
     }
