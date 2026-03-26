@@ -8,10 +8,20 @@ const Navbar = () => {
 };
 
   return (
-    <nav style={{ padding: "10px", background: "#eee" }}>
-      <Link to="/">Home</Link>
-      <button onClick={handleLogout}>Logout</button>
-    </nav>
+    <div style={{
+  display: "flex",
+  justifyContent: "space-between",
+  padding: "12px 20px",
+  borderBottom: "1px solid #eee"
+}}>
+  <h2>Exampire</h2>
+
+  <div style={{ display: "flex", gap: "15px" }}>
+    <a href="/">Home</a>
+    <a href="/exams">Exams</a>
+    <a href="/saved">Saved</a>
+  </div>
+</div>
   );
 };
 
