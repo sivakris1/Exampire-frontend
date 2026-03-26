@@ -3,7 +3,20 @@ import API, { favoritePaper, unfavoritePaper } from "../api/client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
+
+
 const PaperCard = ({ paper, isSaved: initialSaved }) => {
+
+  const cardStyle = {
+  border: "1px solid #050a13",
+  borderRadius: "40px",
+  padding: "16px",
+  marginBottom: "16px",
+  cursor: "pointer",
+  transition: "0.2s",
+  background: "#fff",
+};
+  
   const navigate = useNavigate();
 
   const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
@@ -41,13 +54,19 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
 };
 
   return (
-    <div style={{ border: "1px solid #ccc", padding: "12px", marginBottom: "12px" }}>
+    <div
+  style={cardStyle}
+  onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)")}
+  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+>
 
       <div onClick={() => navigate(`/papers/${paper._id}`)}>
-        <h3>{paper.paperTitle}</h3>
-        <p><strong>Exam:</strong> {paper.examName}</p>
-        <p><strong>Year:</strong> {paper.year}</p>
-        <p><strong>Shift:</strong> {paper.shift}</p>
+        <h3 style={{ fontSize: "18px", marginBottom: "6px" }}>
+  {paper.paperTitle}
+</h3>
+        <p style={{ color: "#6b7280", fontSize: "14px" }}>
+  {paper.examName} • {paper.year} • Shift {paper.shift}
+</p>
         <p><strong>Difficulty:</strong> {paper.metadata?.difficulty}</p>
       </div>
 
@@ -57,9 +76,18 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
           ❤️ {favorites}
         </p>
 
-        <button onClick={handleFavorite}>
-          {isSaved ? "❤️ Saved" : "🤍 Save"}
-        </button>
+        <button onClick={handleFavorite}
+  style={{
+    padding: "6px 12px",
+    borderRadius: "6px",
+    border: "none",
+    background: isSaved ? "#ef4444" : "#e5e7eb",
+    color: isSaved ? "#fff" : "#000",
+    cursor: "pointer",
+  }}
+>
+  {isSaved ? "Saved" : "Save"}
+</button>
 
         <br /><br />
 
