@@ -28,28 +28,21 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      setLoading(true);
-      const res = await loginUser(form);
+  try {
+    const res = await loginUser(form);
 
-      const token = res.data.token;
+    localStorage.setItem("token", res.data.token);
 
-      localStorage.setItem("token", token);
+    console.log("FROM:", location.state?.from); // DEBUG
 
-      toast.success("Login successful ✅");
+    navigate(from, { replace: true });
 
-      navigate("/");
-    } catch (err) {
-      const message =
-      err.response?.data?.message || "Login failed❌";
-
-    toast.error(message);
-    }finally{
-      setLoading(false);
-    }
-  };
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   return (
     <div>
