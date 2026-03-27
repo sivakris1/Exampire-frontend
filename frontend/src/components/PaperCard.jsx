@@ -2,7 +2,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import API, { favoritePaper, unfavoritePaper } from "../api/client";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
+import { useLocation } from "react-router-dom";
 
 
 const PaperCard = ({ paper, isSaved: initialSaved }) => {
@@ -19,6 +19,8 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
   
   const navigate = useNavigate();
 
+  const location = useLocation();
+
   const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
   const [isSaved, setIsSaved] = useState(initialSaved);
 
@@ -32,8 +34,12 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
 
   if (!token) {
     navigate("/login", {
-    state: { from: window.location.pathname }
+  state: {
+    from: location.pathname + location.search
+  },
+  replace: false
 });
+return;
   }
 
   try {
