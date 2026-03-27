@@ -21,6 +21,8 @@ const PaperCard = ({ paper, isSaved: initialSaved }) => {
 
   const location = useLocation();
 
+  const [loading, setLoading] = useState(false);
+
   const [favorites, setFavorites] = useState(paper.metadata?.favorites || 0);
   const [isSaved, setIsSaved] = useState(initialSaved);
 
@@ -43,6 +45,7 @@ return;
   }
 
   try {
+    setLoading(true);
     const res = await API.post(`/papers/${paper._id}/favorite`);
 
     setIsSaved(res.data.isFavorited);
@@ -56,6 +59,8 @@ return;
 
   } catch (error) {
     toast.error("Something went wrong");
+  } finally{
+    setLoading(false);
   }
 };
 
@@ -82,17 +87,20 @@ return;
           ❤️ {favorites}
         </p>
 
-        <button onClick={handleFavorite}
+        <button
+  onClick={handleFavorite}
+  disabled={loading}
   style={{
     padding: "6px 12px",
     borderRadius: "6px",
     border: "none",
     background: isSaved ? "#ef4444" : "#e5e7eb",
     color: isSaved ? "#fff" : "#000",
-    cursor: "pointer",
+    cursor: loading ? "not-allowed" : "pointer",
+    opacity: loading ? 0.6 : 1
   }}
 >
-  {isSaved ? "Saved" : "Save"}
+  {loading ? "Saving..." : isSaved ? "Saved" : "Save"}
 </button>
 
         <br /><br />
