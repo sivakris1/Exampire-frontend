@@ -31,6 +31,7 @@ const Login = () => {
   e.preventDefault();
 
   try {
+    setLoading(true);
     const res = await loginUser(form);
 
     localStorage.setItem("token", res.data.token);
@@ -41,6 +42,8 @@ const Login = () => {
 
   } catch (err) {
     console.error(err);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -69,7 +72,9 @@ const Login = () => {
           required
         />
 
-        {loading ? 'Loading' : <button type="submit">Login</button>}
+        <button disabled={loading}>
+  {loading ? "Logging in..." : "Login"}
+</button>
       </form>
     </div>
   );
